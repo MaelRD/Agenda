@@ -1,0 +1,104 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #2980b9, #6dd5fa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #fff;
+}
+
+.login-wrapper {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+input[type="text"], input[type="password"] {
+  width: 90%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  outline: none;
+}
+
+input::placeholder {
+  color: #ddd;
+}
+
+button {
+  width: 95%;
+  padding: 12px;
+  background-color: #1abc9c;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #16a085;
+}
+
+hr {
+  margin: 30px 0 10px;
+  border: 0;
+  border-top: 1px solid #ffffff30;
+}
+
+.hint {
+  margin: 5px 0;
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+.message {
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+
+.form-section {
+  transition: all 0.5s ease;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.form-section.visible {
+  opacity: 1;
+  height: auto;
+  pointer-events: auto;
+}
+
+.form-section.hidden {
+  opacity: 0;
+  height: 0;
+  pointer-events: none;
+}

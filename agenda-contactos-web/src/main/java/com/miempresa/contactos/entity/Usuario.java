@@ -1,11 +1,16 @@
 package com.miempresa.contactos.entity;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 @Entity
 @Table(name = "tac01_usuario")
-public class Usuario extends PanacheEntity {
+public class Usuario extends PanacheEntityBase {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
+    public Long id;
 
     @Column(name = "tx_nombre", nullable = false)
     public String nombre;

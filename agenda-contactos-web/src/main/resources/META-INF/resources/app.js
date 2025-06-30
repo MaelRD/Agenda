@@ -1,3 +1,6 @@
+// ========== CONFIGURAR API BASE ==========
+const API_BASE = "http://localhost:8888";
+
 // ========== INICIAR SESIÓN ==========
 document.getElementById("loginForm").addEventListener("submit", async function (e) {
   e.preventDefault();
@@ -6,7 +9,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   const password = document.getElementById("password").value;
 
   try {
-    const response = await fetch("/usuarios/login", {
+    const response = await fetch(`${API_BASE}/usuarios/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ login, password })
@@ -19,7 +22,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
       localStorage.setItem("usuarioId", usuario.id);
       msg.style.color = "lightgreen";
       msg.textContent = "¡Bienvenido, " + usuario.nombre + "!";
-      // Aquí puedes redirigir o cargar datos adicionales
       cargarContactos();
     } else {
       msg.style.color = "orange";
@@ -29,7 +31,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     document.getElementById("loginMessage").textContent = "Error al conectar con el servidor.";
   }
 });
-
 
 // ========== REGISTRAR USUARIO ==========
 document.getElementById("registroForm").addEventListener("submit", async function (e) {
@@ -42,7 +43,7 @@ document.getElementById("registroForm").addEventListener("submit", async functio
   const password = document.getElementById("passwordRegistro").value;
 
   try {
-    const response = await fetch("/usuarios/registrar", {
+    const response = await fetch(`${API_BASE}/usuarios/registrar`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -71,14 +72,13 @@ document.getElementById("registroForm").addEventListener("submit", async functio
   }
 });
 
-
 // ========== CARGAR CONTACTOS ==========
 async function cargarContactos() {
   const usuarioId = localStorage.getItem("usuarioId");
   if (!usuarioId) return;
 
   try {
-    const response = await fetch("/contactos/usuario/" + usuarioId);
+    const response = await fetch(`${API_BASE}/contactos/usuario/${usuarioId}`);
     if (response.ok) {
       const contactos = await response.json();
       const lista = document.getElementById("listaContactos");
@@ -91,7 +91,6 @@ async function cargarContactos() {
         lista.appendChild(li);
       });
 
-      // Mostrar contenedor si existe
       const appContainer = document.getElementById("appContainer");
       if (appContainer) appContainer.style.display = "block";
     }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Contactos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    Agenda de Contactos – <span id="usuarioNombreHeader"></span>
+    <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+</header>
+
+<div class="main-container">
+    <nav class="sidebar">
+        <a href="#">Contactos</a>
+        <a href="#">Tipos de contacto</a>
+    </nav>
+
+    <section class="content">
+        <h2>Mis Contactos</h2>
+
+        <form id="formContacto">
+            <input type="text" id="nombreContacto" placeholder="Nombre del contacto" required>
+            <select id="tipoContactoSelect" required></select>
+            <input type="text" id="valorContacto" placeholder="Valor (email, teléfono...)" required>
+            <button type="submit">Guardar contacto</button>
+        </form>
+
+        <div class="stats" id="listaContactos">
+            <!-- Contactos se insertarán aquí -->
+        </div>
+    </section>
+</div>
+
+<script src="dashboard.js"></script>
+<script>
+    // Redirige al login si no hay sesión
+    const usuarioId = localStorage.getItem("usuarioId");
+    if (!usuarioId) window.location.href = "index.html";
+
+    // Muestra nombre del usuario
+    document.getElementById("usuarioNombreHeader").textContent =
+        localStorage.getItem("usuarioNombre") || "Usuario";
+</script>
+</body>
+</html>
