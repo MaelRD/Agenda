@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Agenda de Contactos – Acceso</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-card">
+
+      <h2>Agenda de Contactos</h2>
+      <p class="subtitle" id="formTitle">Crea tu cuenta para comenzar</p>
+
+      <!-- FORMULARIO DE REGISTRO -->
+      <form id="registroForm" class="form-section visible">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="text" id="primerApellido" placeholder="Primer apellido" required>
+        <input type="text" id="segundoApellido" placeholder="Segundo apellido">
+        <input type="text" id="loginRegistro" placeholder="Usuario" required>
+        <input type="password" id="passwordRegistro" placeholder="Contraseña" required>
+        <button type="submit">Registrarme</button>
+        <div id="registroMessage" class="message"></div>
+      </form>
+
+      <!-- FORMULARIO DE LOGIN -->
+      <form id="loginForm" class="form-section hidden">
+        <input type="text" id="login" placeholder="Usuario" required>
+        <input type="password" id="password" placeholder="Contraseña" required>
+        <button type="submit">Entrar</button>
+        <div id="loginMessage" class="message"></div>
+      </form>
+
+      <hr>
+
+      <button id="toggleBtn" type="button">¿Ya tienes cuenta? Inicia sesión</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const toggleBtn = document.getElementById("toggleBtn");
+    const formTitle = document.getElementById("formTitle");
+    const registroForm = document.getElementById("registroForm");
+    const loginForm = document.getElementById("loginForm");
+
+    toggleBtn.addEventListener("click", () => {
+      registroForm.classList.toggle("visible");
+      registroForm.classList.toggle("hidden");
+      loginForm.classList.toggle("visible");
+      loginForm.classList.toggle("hidden");
+
+      // Actualiza texto y botón
+      const showingLogin = loginForm.classList.contains("visible");
+      formTitle.textContent = showingLogin ? "Inicia sesión para continuar" : "Crea tu cuenta para comenzar";
+      toggleBtn.textContent = showingLogin ? "¿No tienes cuenta? Crear una" : "¿Ya tienes cuenta? Inicia sesión";
+    });
+  </script>
+</body>
+</html>
