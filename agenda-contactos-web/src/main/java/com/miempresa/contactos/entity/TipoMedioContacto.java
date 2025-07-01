@@ -7,7 +7,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "cac01_tipo_medio_contacto")
 public class TipoMedioContacto extends PanacheEntityBase {
+
     @Id
+    @Column(name = "id_tipo")
+    public Long id;
+
     @Column(name = "tx_nombre", nullable = false)
     public String nombre;
 
@@ -15,5 +19,5 @@ public class TipoMedioContacto extends PanacheEntityBase {
     public String descripcion;
 
     @Column(name = "st_activo")
-    public boolean activo;
+    public Boolean activo;
 }

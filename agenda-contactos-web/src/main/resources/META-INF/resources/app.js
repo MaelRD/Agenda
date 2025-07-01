@@ -2,7 +2,7 @@
 const API_BASE = "http://localhost:8888";
 
 // ========== INICIAR SESIÓN ==========
-document.getElementById("loginForm").addEventListener("submit", async function (e) {
+document.getElementById("loginForm")?.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const login = document.getElementById("login").value;
@@ -20,9 +20,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     if (response.ok) {
       const usuario = await response.json();
       localStorage.setItem("usuarioId", usuario.id);
-      msg.style.color = "lightgreen";
-      msg.textContent = "¡Bienvenido, " + usuario.nombre + "!";
-      cargarContactos();
+      window.location.href = "dashboard.html";
     } else {
       msg.style.color = "orange";
       msg.textContent = "Credenciales incorrectas.";
@@ -33,7 +31,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 });
 
 // ========== REGISTRAR USUARIO ==========
-document.getElementById("registroForm").addEventListener("submit", async function (e) {
+document.getElementById("registroForm")?.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const nombre = document.getElementById("nombre").value;
@@ -72,29 +70,82 @@ document.getElementById("registroForm").addEventListener("submit", async functio
   }
 });
 
-// ========== CARGAR CONTACTOS ==========
-async function cargarContactos() {
+// ========== VALIDAR SESIÓN EN DASHBOARD ==========
+if (window.location.pathname.includes("dashboard.html")) {
   const usuarioId = localStorage.getItem("usuarioId");
-  if (!usuarioId) return;
+  if (!usuarioId) {
+    window.location.href = "login.html";
+  } else {
+    cargarContactos();
+  }
+}
+
+// ========== GUARDAR NUEVO CONTACTO ==========
+document.getElementById("formContacto")?.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const usuarioId = localStorage.getItem("usuarioId");
+  const nombre = document.getElementById("nombreContacto").value;
+  const apellido = document.getElementById("apellidoContacto").value;
+
+  const nuevoContacto = {
+    idUsuario: parseInt(usuarioId),
+    nombre: nombre,
+    primerApellido: apellido,
+    segundoApellido: "",
+    apodo: ""
+  };
+
+  console.log("Enviando:", JSON.stringify(nuevoContacto));
 
   try {
-    const response = await fetch(`${API_BASE}/contactos/usuario/${usuarioId}`);
+    const response = await fetch(`${API_BASE}/contactos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(nuevoContacto)
+    });
+
+    if (response.ok) {
+      alert("Contacto guardado exitosamente.");
+      e.target.reset();
+      cargarContactos();
+    } else {
+      const error = await response.text();
+      alert("Error al guardar contacto:\n" + error);
+    }
+  } catch (err) {
+    alert("Error al conectar con el servidor.");
+    console.error(err);
+  }
+});
+
+// ========== CARGAR CONTACTOS ==========
+async function cargarContactos() {
+  try {
+    const response = await fetch(`${API_BASE}/contactos/completos`);
     if (response.ok) {
       const contactos = await response.json();
       const lista = document.getElementById("listaContactos");
       if (!lista) return;
 
       lista.innerHTML = "";
-      contactos.forEach(contacto => {
+      contactos.forEach(c => {
         const li = document.createElement("li");
-        li.textContent = contacto.nombre + " " + contacto.primerApellido;
+        const mediosTexto = c.medios.map(m => `${m.tipo}: ${m.valor}`).join(", ");
+        li.textContent = `${c.nombreCompleto} – ${mediosTexto}`;
         lista.appendChild(li);
       });
-
-      const appContainer = document.getElementById("appContainer");
-      if (appContainer) appContainer.style.display = "block";
+    } else {
+      const error = await response.text();
+      console.error("Error al cargar contactos:", error);
     }
   } catch (err) {
-    console.error("Error al cargar contactos:", err);
+    console.error("Error al conectar al backend:", err);
   }
+}
+
+// ========== CERRAR SESIÓN ==========
+function cerrarSesion() {
+  localStorage.removeItem("usuarioId");
+  window.location.href = "login.html";
 }

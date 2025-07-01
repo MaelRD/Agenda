@@ -41,7 +41,6 @@ public class MedioContactoResource {
 
         medio.tipo = datos.tipo;
         medio.valor = datos.valor;
-        medio.activo = datos.activo;
         medio.contacto = datos.contacto;
 
         medio.persist();
