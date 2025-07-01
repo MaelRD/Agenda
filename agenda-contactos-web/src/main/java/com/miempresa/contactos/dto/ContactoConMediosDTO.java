@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ContactoConMediosDTO {
 
+    private Long id; // ✅ Este campo es requerido para poder hacer setId()
     private String nombreCompleto;
     private List<MedioDTO> medios;
 
@@ -22,3 +23,4 @@ public class ContactoConMediosDTO {
         private String valor;
     }
 }
+

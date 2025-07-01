@@ -186,7 +186,6 @@
     </div>
 </div>
 
-<!-- Modal para editar contacto -->
 <div id="modalEditar">
     <div class="modal-content">
         <h3>✏️ Editar contacto</h3>
@@ -201,103 +200,7 @@
     </div>
 </div>
 
-<script>
-    const API_BASE = "http://localhost:8888";
-    const usuarioId = localStorage.getItem("usuarioId");
-    if (!usuarioId) window.location.href = "login.html";
+<script src="app.js"></script>
 
-    document.getElementById("formContacto").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const contacto = {
-            idUsuario: parseInt(usuarioId),
-            nombre: document.getElementById("nombreContacto").value,
-            primerApellido: document.getElementById("apellidoContacto").value,
-            segundoApellido: document.getElementById("segundoApellidoContacto").value,
-            apodo: document.getElementById("apodoContacto").value
-        };
-
-        const res = await fetch(`${API_BASE}/contactos`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(contacto)
-        });
-
-        if (res.ok) {
-            e.target.reset();
-            cargarContactos();
-        } else {
-            const msg = await res.text();
-            alert("Error al guardar contacto:\n" + msg);
-        }
-    });
-
-    async function cargarContactos() {
-        const res = await fetch(`${API_BASE}/contactos/completos`);
-        if (res.ok) {
-            const contactos = await res.json();
-            const lista = document.getElementById("listaContactos");
-            lista.innerHTML = "";
-            contactos.forEach(c => {
-                const li = document.createElement("li");
-                const medios = c.medios?.map(m => `${m.tipo}: ${m.valor}`).join(", ") || "Sin medios";
-                li.innerHTML = `<strong>${c.nombreCompleto}</strong> – ${medios}
-            <button onclick="editarContacto(${c.id})">✏️</button>`;
-                lista.appendChild(li);
-            });
-        }
-    }
-
-    let contactoEditandoId = null;
-
-    async function editarContacto(id) {
-        const res = await fetch(`${API_BASE}/contactos/${id}`);
-        if (res.ok) {
-            const contacto = await res.json();
-            contactoEditandoId = id;
-            document.getElementById("editNombre").value = contacto.nombre;
-            document.getElementById("editApellido").value = contacto.primerApellido;
-            document.getElementById("editSegundoApellido").value = contacto.segundoApellido || "";
-            document.getElementById("editApodo").value = contacto.apodo || "";
-            document.getElementById("modalEditar").style.display = "flex";
-        } else {
-            alert("Error al cargar contacto");
-        }
-    }
-
-    async function guardarEdicion() {
-        const datos = {
-            nombre: document.getElementById("editNombre").value,
-            primerApellido: document.getElementById("editApellido").value,
-            segundoApellido: document.getElementById("editSegundoApellido").value,
-            apodo: document.getElementById("editApodo").value
-        };
-
-        const res = await fetch(`${API_BASE}/contactos/${contactoEditandoId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(datos)
-        });
-
-        if (res.ok) {
-            alert("Contacto actualizado");
-            cerrarModal();
-            cargarContactos();
-        } else {
-            alert("Error al actualizar contacto");
-        }
-    }
-
-    function cerrarModal() {
-        document.getElementById("modalEditar").style.display = "none";
-        contactoEditandoId = null;
-    }
-
-    function cerrarSesion() {
-        localStorage.removeItem("usuarioId");
-        window.location.href = "login.html";
-    }
-
-    cargarContactos();
-</script>
 </body>
 </html>

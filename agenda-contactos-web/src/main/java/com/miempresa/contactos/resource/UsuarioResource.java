@@ -2,7 +2,9 @@ package com.miempresa.contactos.resource;
 
 import com.miempresa.contactos.dto.LoginDTO;
 import com.miempresa.contactos.dto.RegistroDTO;
+import com.miempresa.contactos.dto.UsuarioDTO;
 import com.miempresa.contactos.entity.Usuario;
+
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -14,18 +16,6 @@ import jakarta.ws.rs.core.Response;
 public class UsuarioResource {
 
     @POST
-    @Path("/login")
-    public Response login(LoginDTO dto) {
-        Usuario usuario = Usuario.find("login = ?1 and password = ?2", dto.getLogin(), dto.getPassword()).firstResult();
-
-        if (usuario == null) {
-            return Response.status(401).entity("Credenciales incorrectas").build();
-        }
-
-        return Response.ok(usuario).build();
-    }
-
-    @POST
     @Path("/registrar")
     @Transactional
     public Response registrar(RegistroDTO dto) {
@@ -34,14 +24,44 @@ public class UsuarioResource {
         }
 
         Usuario usuario = new Usuario();
-        usuario.nombre = dto.getNombre();
-        usuario.primerApellido = dto.getPrimerApellido();
-        usuario.segundoApellido = dto.getSegundoApellido();
-        usuario.login = dto.getLogin();
-        usuario.password = dto.getPassword();
+        usuario.setNombre(dto.getNombre());
+        usuario.setPrimerApellido(dto.getPrimerApellido());
+        usuario.setSegundoApellido(dto.getSegundoApellido());
+        usuario.setLogin(dto.getLogin());
+        usuario.setPassword(dto.getPassword());
 
         usuario.persist();
 
-        return Response.ok(usuario).build();
+        // Crear y retornar el DTO como respuesta
+        UsuarioDTO responseDto = new UsuarioDTO();
+        responseDto.setId(usuario.getId());
+        responseDto.setNombre(usuario.getNombre());
+        responseDto.setLogin(usuario.getLogin());
+
+        return Response.ok(responseDto).build();
+    }
+
+    @POST
+    @Path("/login")
+    @Transactional
+    public Response login(LoginDTO dto) {
+        Usuario usuario = Usuario.find("login = ?1 and password = ?2", dto.getLogin(), dto.getPassword()).firstResult();
+
+        if (usuario == null) {
+            return Response.status(401).entity("Credenciales inválidas").build();
+        }
+
+        UsuarioDTO responseDto = new UsuarioDTO();
+        responseDto.setId(usuario.getId());
+        responseDto.setNombre(usuario.getNombre());
+        responseDto.setLogin(usuario.getLogin());
+
+        return Response.ok(responseDto).build();
+    }
+
+    @POST
+    @Path("/logout")
+    public Response logout() {
+        return Response.ok("Sesión cerrada correctamente").build();
     }
 }

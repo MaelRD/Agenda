@@ -2,28 +2,34 @@ package com.miempresa.contactos.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tac01_usuario")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Usuario extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
-    public Long id;
+    private Long id;
 
     @Column(name = "tx_nombre", nullable = false)
-    public String nombre;
+    private String nombre;
 
     @Column(name = "tx_primer_apellido", nullable = false)
-    public String primerApellido;
+    private String primerApellido;
 
     @Column(name = "tx_segundo_apellido")
-    public String segundoApellido;
+    private String segundoApellido;
 
     @Column(name = "tx_login", unique = true, nullable = false)
-    public String login;
+    private String login;
 
     @Column(name = "tx_password", nullable = false)
-    public String password;
+    private String password;
 }

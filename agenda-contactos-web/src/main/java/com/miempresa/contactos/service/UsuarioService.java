@@ -19,7 +19,7 @@ public class UsuarioService {
 
     @Transactional
     public void cambiarPassword(Usuario usuario, String nuevaPassword) {
-        usuario.password = nuevaPassword;
+        usuario.setPassword(nuevaPassword); // ✅ usa el setter
         usuario.persist();
     }
 
@@ -27,7 +27,7 @@ public class UsuarioService {
     public void recuperarPassword(String login, String nuevaPassword) {
         Usuario usuario = buscarPorLogin(login);
         if (usuario != null) {
-            usuario.password = nuevaPassword;
+            usuario.setPassword(nuevaPassword); // ✅ usa el setter
             usuario.persist();
         }
     }

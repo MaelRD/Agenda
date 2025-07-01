@@ -15,7 +15,7 @@ public class AuthService {
     public Usuario autenticar(String login, String password) {
         Usuario usuario = Usuario.find("login", login).firstResult();
 
-        if (usuario != null && usuario.password.equals(password)) {
+        if (usuario != null && usuario.getPassword().equals(password)) {
             return usuario;
         }
         return null;
